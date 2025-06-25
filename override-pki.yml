@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  step-ca:
+    image: smallstep/step-ca:latest
+    container_name: step-ca
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./pki/step:/home/step
+    networks:
+      reseau-outils:
+        ipv4_address: 172.30.4.100
+    command: ["step-ca", "/home/step/config/ca.json", "--password-file", "/home/step/password.txt"]
+
+networks:
+  reseau-outils:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.4.0/24
+          gateway: 172.30.4.254
+
