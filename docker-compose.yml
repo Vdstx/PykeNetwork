@@ -13,12 +13,6 @@ networks:
       config:
         - subnet: 172.30.100.0/24
 
-  reseau-rd:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.30.1.0/24
-
   reseau-rh:
     driver: bridge
     ipam:
@@ -38,7 +32,6 @@ networks:
         - subnet: 172.30.4.0/24
 
 services:
-  # Client distant (simulateur de connexion VPN)
   pc-remote:
     image: alpine
     container_name: pc-remote
@@ -47,7 +40,6 @@ services:
       reseau-internet:
         ipv4_address: 172.31.0.10
 
-  # Routeur internet (RI)
   routeur-ri:
     image: alpine
     container_name: routeur-ri
@@ -60,7 +52,6 @@ services:
       reseau-central:
         ipv4_address: 172.30.100.254
 
-  # Routeur central (RC)
   routeur-rc:
     image: alpine
     container_name: routeur-rc
@@ -69,44 +60,10 @@ services:
       - NET_ADMIN
     networks:
       reseau-central:
-        #ipv4_address: 172.30.100.2
-      reseau-rd:
-        #ipv4_address: 172.30.1.254
       reseau-rh:
-        #ipv4_address: 172.30.2.254
       reseau-com:
-        #ipv4_address: 172.30.3.254
       reseau-outils:
-        #ipv4_address: 172.30.4.254
 
-  # Routeur R&D
-  routeur-rd:
-    image: alpine
-    container_name: routeur-rd
-    command: sleep infinity
-    cap_add:
-      - NET_ADMIN
-    networks:
-      reseau-rd:
-        ipv4_address: 172.30.1.253
-
-  pc1:
-    image: alpine
-    container_name: pc1
-    command: sleep infinity
-    networks:
-      reseau-rd:
-        ipv4_address: 172.30.1.10
-
-  pc2:
-    image: alpine
-    container_name: pc2
-    command: sleep infinity
-    networks:
-      reseau-rd:
-        ipv4_address: 172.30.1.11
-
-  # Routeur RH
   routeur-rh:
     image: alpine
     container_name: routeur-rh
@@ -117,23 +74,14 @@ services:
       reseau-rh:
         ipv4_address: 172.30.2.253
 
-  pc3:
+  pc1:
     image: alpine
-    container_name: pc3
+    container_name: pc1
     command: sleep infinity
     networks:
       reseau-rh:
         ipv4_address: 172.30.2.10
 
-  pc4:
-    image: alpine
-    container_name: pc4
-    command: sleep infinity
-    networks:
-      reseau-rh:
-        ipv4_address: 172.30.2.11
-
-  # Routeur Communication
   routeur-com:
     image: alpine
     container_name: routeur-com
@@ -144,23 +92,14 @@ services:
       reseau-com:
         ipv4_address: 172.30.3.253
 
-  pc5:
+  pc2:
     image: alpine
-    container_name: pc5
+    container_name: pc2
     command: sleep infinity
     networks:
       reseau-com:
         ipv4_address: 172.30.3.10
 
-  pc6:
-    image: alpine
-    container_name: pc6
-    command: sleep infinity
-    networks:
-      reseau-com:
-        ipv4_address: 172.30.3.11
-
-  # Routeur Outils (VPN/IDS/IPS/admin à venir)
   routeur-outils:
     image: alpine
     container_name: routeur-outils
