@@ -60,9 +60,13 @@ services:
       - NET_ADMIN
     networks:
       reseau-central:
+        ipv4_address: 172.30.100.2
       reseau-rh:
+        ipv4_address: 172.30.2.2
       reseau-com:
+        ipv4_address: 172.30.3.2
       reseau-outils:
+        ipv4_address: 172.30.4.2
 
   routeur-rh:
     image: alpine
