@@ -1,0 +1,7 @@
+FROM debian:stable-slim
+
+RUN apt update && \
+    apt install -y iproute2 procps iputils-ping && \
+    rm -rf /var/lib/apt/lists/*
+
+CMD sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward && sleep infinity"
