@@ -32,20 +32,14 @@ networks:
         - subnet: 172.30.4.0/24
 
 services:
-  pc-remote:
-    image: alpine
-    container_name: pc-remote
-    command: sleep infinity
-    networks:
-      reseau-internet:
-        ipv4_address: 172.31.0.10
-
   routeur-ri:
-    image: alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.routeur
     container_name: routeur-ri
-    command: sleep infinity
     cap_add:
       - NET_ADMIN
+    privileged: true
     networks:
       reseau-internet:
         ipv4_address: 172.31.0.254
@@ -53,11 +47,13 @@ services:
         ipv4_address: 172.30.100.254
 
   routeur-rc:
-    image: alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.routeur
     container_name: routeur-rc
-    command: sleep infinity
     cap_add:
       - NET_ADMIN
+    privileged: true
     networks:
       reseau-central:
         ipv4_address: 172.30.100.2
@@ -69,48 +65,67 @@ services:
         ipv4_address: 172.30.4.2
 
   routeur-rh:
-    image: alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.routeur
     container_name: routeur-rh
-    command: sleep infinity
     cap_add:
       - NET_ADMIN
+    privileged: true
     networks:
       reseau-rh:
         ipv4_address: 172.30.2.253
 
+  routeur-com:
+    build:
+      context: .
+      dockerfile: Dockerfile.routeur
+    container_name: routeur-com
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      reseau-com:
+        ipv4_address: 172.30.3.253
+
+  routeur-outils:
+    build:
+      context: .
+      dockerfile: Dockerfile.routeur
+    container_name: routeur-outils
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      reseau-outils:
+        ipv4_address: 172.30.4.253
+        
   pc1:
     image: alpine
     container_name: pc1
     command: sleep infinity
+    cap_add:
+    - NET_ADMIN
     networks:
       reseau-rh:
         ipv4_address: 172.30.2.10
-
-  routeur-com:
-    image: alpine
-    container_name: routeur-com
-    command: sleep infinity
-    cap_add:
-      - NET_ADMIN
-    networks:
-      reseau-com:
-        ipv4_address: 172.30.3.253
 
   pc2:
     image: alpine
     container_name: pc2
     command: sleep infinity
+    cap_add:
+    - NET_ADMIN
     networks:
       reseau-com:
         ipv4_address: 172.30.3.10
 
-  routeur-outils:
+  pc-remote:
     image: alpine
-    container_name: routeur-outils
+    container_name: pc-remote
     command: sleep infinity
     cap_add:
-      - NET_ADMIN
+    - NET_ADMIN
     networks:
-      reseau-outils:
-        ipv4_address: 172.30.4.253
-
+      reseau-internet:
+        ipv4_address: 172.31.0.10
